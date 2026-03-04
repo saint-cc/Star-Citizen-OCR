@@ -1,5 +1,4 @@
-https://www.youtube.com/watch?v=Zb2eGtDlaPQ
-https://starmap.cyberchaos.nl
+
 
 # Star-Citizen-OCR
 
@@ -26,3 +25,5 @@ Attempt to read display info and forward to web starmap
 - You need local runtime dependencies installed (for example: Tesseract OCR, Flask, tkinter, websocket/aiohttp stack, and related Python packages used by each script).
 - The existing YouTube reference/demo:
   - https://www.youtube.com/watch?v=Zb2eGtDlaPQ)
+- The StarMapdemo:
+  - https://starmap.cyberchaos.nl
