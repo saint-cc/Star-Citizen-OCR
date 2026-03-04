@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macro Dashboards</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background-color: #121212;
+            color: #eee;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #333;
+            background-color: #1f1f1f;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-right: 1px solid #333;
+        }
+
+        .tab.active {
+            background-color: #333;
+            font-weight: bold;
+        }
+
+        .dashboard-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .dashboard-content.active {
+            display: block;
+        }
+
+        .button-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .button-grid button {
+            background-color: #444;
+            color: #eee;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .button-grid button:hover {
+            background-color: #666;
+        }
+
+        h1 {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="tabs" class="tabs"></div>
+    <div id="dashboards-container"></div>
+
+    <script>
+        // ---- Load user data ----
+        let currentUsername = prompt("Username:");
+        let currentPassword = prompt("Password:");
+
+        function decryptData(encryptedData, password) {
+            const decryptedData = atob(encryptedData).slice(0, -password.length);
+            return JSON.parse(decryptedData);
+        }
+
+        function loadUserData(username, password) {
+            const encryptedData = localStorage.getItem(username);
+            if (!encryptedData) return null;
+            try {
+                return decryptData(encryptedData, password);
+            } catch (e) {
+                console.error("Failed to decrypt user data:", e);
+                return null;
+            }
+        }
+
+        // ---- Macro sending function (reuse your existing one) ----
+        function sendMacro(id) {
+            let userData = loadUserData(currentUsername, currentPassword);
+            let macro = userData.macros.find(m => m.id === id);
+
+            if (macro) {
+                let keyMappingsList = [];
+                macro.keylist.forEach(keyId => {
+                    let keyMapping = userData.keyMappings.find(k => k.id === keyId);
+                    if (keyMapping) {
+                        keyMappingsList.push({
+                            key: keyMapping.key.key,
+                            duration: keyMapping.key.duration,
+                            modifiers: keyMapping.key.modifiers
+                        });
+                    }
+                });
+                fetch('/play_macro', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ keylist: keyMappingsList })
+                }).then(r => r.json())
+                  .then(data => {
+                      if (data.status === 'success') {
+                          console.log('Macro sent:', macro.name);
+                      } else alert('Error sending macro');
+                  });
+            }
+        }
+
+        // ---- Dashboard loader ----
+        function loadDashboards() {
+            const userData = loadUserData(currentUsername, currentPassword);
+            if (!userData || !userData.dashboards || userData.dashboards.length === 0) {
+                document.getElementById('tabs').innerHTML = '<div class="tab active">No Dashboards</div>';
+                document.getElementById('dashboards-container').innerHTML = '<p style="padding:20px;">No dashboards found.</p>';
+                return;
+            }
+
+            const tabsDiv = document.getElementById('tabs');
+            const containerDiv = document.getElementById('dashboards-container');
+            tabsDiv.innerHTML = '';
+            containerDiv.innerHTML = '';
+
+            userData.dashboards.forEach((dashboard, idx) => {
+                // Create tab
+                const tab = document.createElement('div');
+                tab.className = 'tab' + (idx === 0 ? ' active' : '');
+                tab.textContent = dashboard.name;
+                tab.onclick = () => switchTab(idx);
+                tabsDiv.appendChild(tab);
+
+                // Create dashboard content
+                const dashDiv = document.createElement('div');
+                dashDiv.className = 'dashboard-content' + (idx === 0 ? ' active' : '');
+                dashDiv.id = 'dashboard-' + idx;
+
+                const buttonGrid = document.createElement('div');
+                buttonGrid.className = 'button-grid';
+
+                dashboard.buttons.forEach(btn => {
+                    const b = document.createElement('button');
+                    b.textContent = btn.name;
+                    b.onclick = () => sendMacro(btn.macroId);
+                    buttonGrid.appendChild(b);
+                });
+
+                dashDiv.appendChild(buttonGrid);
+                containerDiv.appendChild(dashDiv);
+            });
+        }
+
+        function switchTab(activeIdx) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.dashboard-content');
+            tabs.forEach((t,i) => t.classList.toggle('active', i === activeIdx));
+            contents.forEach((c,i) => c.classList.toggle('active', i === activeIdx));
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDashboards);
+    </script>
+	<script>
+    let lastUserDataJSON = null;
+
+    function getUserDataJSON() {
+        const data = loadUserData(currentUsername, currentPassword);
+        return data ? JSON.stringify(data) : null;
+    }
+
+    function autoRefreshUserData() {
+        const currentDataJSON = getUserDataJSON();
+        if (currentDataJSON !== lastUserDataJSON) {
+            lastUserDataJSON = currentDataJSON;
+            console.log("User data changed, refreshing dashboards...");
+            loadDashboards();
+        }
+    }
+
+    // Run auto-refresh every 1 second
+    setInterval(autoRefreshUserData, 1000);
+
+    // Initialize lastUserDataJSON
+    lastUserDataJSON = getUserDataJSON();
+</script>
+
+</body>
+</html>

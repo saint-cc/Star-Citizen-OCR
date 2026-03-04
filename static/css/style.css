@@ -1,0 +1,154 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.hidden {
+    display: none;
+}
+
+#login-container,
+#app-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+h1, h2, h3 {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+form label {
+    width: 100%;
+    margin-top: 10px;
+}
+
+form input,
+form button {
+    margin-top: 5px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+form input {
+    flex: 1 1 auto;
+}
+
+form button {
+    flex: 0 0 auto;
+    margin-left: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+li button {
+    margin-left: 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+li button:hover {
+    background-color: #d32f2f;
+}
+
+.button-container {
+    text-align: right;
+}
+
+.button-container button {
+    margin-left: 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#selected-keys {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Adjust the gap between keys as needed */
+}
+
+.selected-key {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.selected-key button {
+    margin-left: 10px; /* Space between the key text and the remove button */
+    background-color: #ff4d4d; /* Red background for remove button */
+    color: white; /* White text for remove button */
+    border: none; /* No border for remove button */
+    padding: 5px 10px; /* Padding inside the button */
+    border-radius: 5px; /* Rounded corners for the button */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.selected-key button:hover {
+    background-color: #e60000; /* Darker red on hover */
+}
+
+#key-mapping-form,
+#macro-form {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+#key-mapping-form-title,
+#macro-form-title {
+    margin-bottom: 10px;
+}
+
+.key-selection {
+    display: flex;
+    gap: 10px; /* Space between the buttons */
+}
+
+#selected-keys-container {
+	display: flex;
+	align-items: right;
+    margin-bottom: 20px; /* Space below the selected keys */
+    margin-top: 20px;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px; /* Space between the buttons */
+}

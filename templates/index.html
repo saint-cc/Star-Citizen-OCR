@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Mapping and Macro Editor</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div id="login-container">
+        <h2>Login</h2>
+        <form id="login-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <div id="app-container" class="hidden">
+        <h1>Key Mapping and Macro Editor</h1>
+
+        <div id="key-mappings-container">
+            <h2>Key Mappings</h2>
+            <ul id="key-mappings-list"></ul>
+            <button id="add-key-mapping">Add Key Mapping</button>
+        </div>
+		
+		<div id="key-mapping-form" class="hidden">
+            <h3 id="key-mapping-form-title">Add/Edit Key Mapping</h3>
+            <form id="key-mapping-edit-form" class="vertical-form">
+                <input type="hidden" id="key-mapping-id">
+				<input type="hidden" id="orderindex">
+                <label for="key-name">Name:</label>
+                <input type="text" id="key-name" required>
+                <label for="key">Key:</label>
+                <input type="text" id="key" required>
+                <label for="duration">Duration:</label>
+                <input type="number" id="duration" min="0">
+                <label for="modifiers">Modifiers (comma separated):</label>
+                <input type="text" id="modifiers">
+                <button type="submit">Save</button>
+                <button type="button" id="cancel-key-mapping">Cancel</button>
+            </form>
+        </div>
+
+        <div id="macros-container">
+            <h2>Macros</h2>
+            <ul id="macros-list"></ul>
+            <button id="add-macro">Add Macro</button>
+            <!-- <button id="submit-keys">Submit Keys</button>-->
+        </div>
+
+
+		<div id="macro-form" class="hidden">
+			<h3 id="macro-form-title">Add/Edit Macro</h3>
+			<form id="macro-edit-form">
+				<input type="hidden" id="macro-id">
+				<label for="macro-name">Name:</label>
+				<input type="text" id="macro-name" required>
+
+				<div class="form-buttons">
+					<button type="submit">Save</button>
+					<button type="button" id="cancel-macro">Cancel</button>
+				</div>			
+				
+				<div class="key-selection">
+					<select id="macro-keys-select">
+						<!-- Options will be populated dynamically -->
+					</select>
+					<button type="button" id="add-key">Add Key</button>
+				</div>
+				
+				<div id="selected-keys-container">
+					<label>Selected Keys:</label>
+					<div id="selected-keys">
+						<!-- Selected keys will be displayed here -->
+					</div>
+				</div>
+				
+			</form>
+		</div>
+		
+		<!-- DASHBOARD SECTION -->
+<div id="dashboard-section">
+    <h2>Dashboards</h2>
+    <ul id="dashboards-list"></ul>
+    <button id="add-dashboard">Add Dashboard</button>
+
+    <!-- Dashboard editor -->
+    <div id="dashboard-form" class="hidden">
+        <h3 id="dashboard-form-title">Add/Edit Dashboard</h3>
+        <form id="dashboard-edit-form">
+            <input type="hidden" id="dashboard-id">
+            <label for="dashboard-name">Dashboard Name:</label>
+            <input type="text" id="dashboard-name" required>
+
+            <h4>Buttons</h4>
+            <ul id="dashboard-buttons-list"></ul>
+
+            <div class="button-add">
+                <input type="text" id="new-button-name" placeholder="Button Name">
+                <select id="new-button-macro">
+                    <!-- Options populated dynamically from macros -->
+                </select>
+                <button type="button" id="add-dashboard-button">Add Button</button>
+            </div>
+
+            <button type="submit">Save Dashboard</button>
+            <button type="button" id="cancel-dashboard">Cancel</button>
+        </form>
+    </div>
+</div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/jscript.js') }}"></script>
+</body>
+</html>
